@@ -4,4 +4,14 @@ include_once 'apimovie.php';
 
 $api = new ApiMovies();
 
-$api->getAll();
+if(isset($_GET['id']))
+{
+  $id = $_GET['id'];
+  if (is_numeric($id)) {
+    $api->getById($id);
+  }else {
+    $api->error('The incorrect params');
+  }
+}else {
+  $api->getAll();
+}

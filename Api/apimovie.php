@@ -22,10 +22,44 @@ class ApiMovies
                 );
                 array_push($movies['items'], $item);
             }
-            echo json_encode($movies);
+            $this->printJSON($movies);
         } else {
-            echo json_encode(array('message' => 'Not elements register'));
+          $this->error('Not elemeents register');
         }
-
     }
+
+    function getById($id)
+    {
+        $movie = new Movie();
+        $movies = array();
+        $movies['items'] = array();
+
+        $res = $movie->getMovie($id);
+
+        if ($res->rowCount() == 1) {
+            $row = $res->fetch();
+
+            $item = array(
+                'id' => $row['id'],
+                'name' => $row['name'],
+                'company' => $row['company'],
+                'year' => $row['year']
+            );
+            array_push($movies['items'], $item);
+            $this->printJSON($movies);
+        } else {
+          $this->error('Not elemeents register');
+        }
+    }
+
+    function printJSON($array)
+    {
+      echo '<code>'. json_encode($array).'</code>';
+    }
+
+    function error($message)
+    {
+      echo '<code>'.json_encode(array('message'=>$message)).'</code>';
+    }
+
 }
